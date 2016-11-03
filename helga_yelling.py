@@ -1,7 +1,6 @@
 import random
 
 from helga.db import db
-
 from helga.plugins import preprocessor
 
 @preprocessor
