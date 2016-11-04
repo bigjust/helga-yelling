@@ -1,2 +1,6 @@
 dist
 helga_yelling.egg-info
+
+*.pyc
+
+.tox
