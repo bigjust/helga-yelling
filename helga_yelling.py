@@ -9,7 +9,7 @@ def is_shout(message):
     Returns `True` if message is determined to be a loud rambling of a
     madperson.
 
-    We should verify letters and there should be atleast 3
+    We should verify letters and there should be atleast 2
     """
 
     regex = re.compile(r'[^a-zA-Z]')
