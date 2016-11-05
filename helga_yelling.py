@@ -13,7 +13,6 @@ def is_shout(message):
     """
 
     regex = re.compile(r'[^a-zA-Z]')
-
     stripped = regex.sub('', message)
 
     if len(stripped) > 1 and stripped.upper() == regex.sub('', message):
@@ -34,11 +33,12 @@ def yelling(client, channel, nick, message):
             random_resp = db.yelling.find({
                 'channel': channel
             })[random.randrange(count)]
+
             client.msg(channel, random_resp['msg'])
 
-        db.yelling.insert({
+        db.yelling.update_one({
             'msg': message,
             'channel': channel,
-        })
+        }, { '$set': { 'msg': message } }, upsert=True)
 
     return (channel, nick, message)

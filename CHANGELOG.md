@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.1.2] - 2016-11-05
+### Fixed
+- don't insert duplicates
+
 ## [0.1.1] - 2016-11-03
 ### Fixed
 - removed a bunch of cases from non-shouts matching
