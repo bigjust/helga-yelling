@@ -1,8 +1,11 @@
 import random
 import re
 
+from helga import log
 from helga.db import db
-from helga.plugins import preprocessor
+from helga.plugins import preprocessor, command
+
+logger = log.getLogger(__name__)
 
 def is_shout(message):
     """
@@ -42,3 +45,25 @@ def yelling(client, channel, nick, message):
         }, { '$set': { 'msg': message } }, upsert=True)
 
     return (channel, nick, message)
+
+@command('yell_forget')
+def forget_yell(client, channel, nick, message, cmd, args):
+    """
+    Remove specified shout from memory.
+    """
+
+    yell_to_forget = ' '.join(args)
+
+    logger.debug('will attempt to purge: {}'.format(yell_to_forget))
+
+    remove_result = db.yelling.delete_one({
+        'msg': yell_to_forget,
+        'channel': channel,
+    })
+
+    logger.debug('remove_result: {}'.format(remove_result.deleted_count))
+
+    if remove_result.deleted_count == 1:
+        return 'done.'
+    else:
+        return 'not found :('

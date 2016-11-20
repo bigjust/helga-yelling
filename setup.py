@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
 
-version = '0.1.2'
+version = '0.2.0'
 
 setup(name="helga-yelling",
       version=version,
       description=('fights fire with fire'),
       classifiers=[
-          'Development Status :: 1 - Planning',
+          'Development Status :: 4 - Beta',
           'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
           'Operating System :: OS Independent',
           'Programming Language :: Python',
@@ -23,6 +23,7 @@ setup(name="helga-yelling",
       entry_points = dict(
           helga_plugins = [
               'yelling = helga_yelling:yelling',
+              'yelling_remove = helga_yelling:forget_yell',
           ],
       ),
 )
