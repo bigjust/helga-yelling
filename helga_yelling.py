@@ -23,47 +23,54 @@ def is_shout(message):
 
     return False
 
+
 @preprocessor
-def yelling(client, channel, nick, message):
+@command('yell', help='Usage: yell remove <pattern>')
+def yelling(client, channel, nick, message, *args):
 
-    if is_shout(message):
+    if len(args) == 0:
+        # Preprocessor
 
-        count = db.yelling.find({
+        if is_shout(message):
+
+            count = db.yelling.find({
+                'channel': channel,
+            }).count()
+
+            if count:
+                random_resp = db.yelling.find({
+                    'channel': channel
+                })[random.randrange(count)]
+
+                client.msg(channel, random_resp['msg'])
+
+                db.yelling.update_one({
+                    'msg': message,
+                    'channel': channel,
+                }, { '$set': { 'msg': message } }, upsert=True)
+
+        return (channel, nick, message)
+
+    if len(args) == 2:
+        logger.debug('args: {}'.format(args))
+
+        cmd, yell = args[1][0], args[1][1:]
+
+        if cmd != 'remove':
+            return
+
+        yell_to_forget = ' '.join(yell)
+
+        logger.debug('will attempt to purge: {}'.format(yell_to_forget))
+
+        remove_result = db.yelling.delete_one({
+            'msg': yell_to_forget,
             'channel': channel,
-        }).count()
+        })
 
-        if count:
-            random_resp = db.yelling.find({
-                'channel': channel
-            })[random.randrange(count)]
+        logger.debug('remove_result: {}'.format(remove_result.deleted_count))
 
-            client.msg(channel, random_resp['msg'])
-
-        db.yelling.update_one({
-            'msg': message,
-            'channel': channel,
-        }, { '$set': { 'msg': message } }, upsert=True)
-
-    return (channel, nick, message)
-
-@command('yell_forget')
-def forget_yell(client, channel, nick, message, cmd, args):
-    """
-    Remove specified shout from memory.
-    """
-
-    yell_to_forget = ' '.join(args)
-
-    logger.debug('will attempt to purge: {}'.format(yell_to_forget))
-
-    remove_result = db.yelling.delete_one({
-        'msg': yell_to_forget,
-        'channel': channel,
-    })
-
-    logger.debug('remove_result: {}'.format(remove_result.deleted_count))
-
-    if remove_result.deleted_count == 1:
-        return 'done.'
-    else:
-        return 'not found :('
+        if remove_result.deleted_count == 1:
+            return 'done.'
+        else:
+            return 'not found :('
