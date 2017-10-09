@@ -44,10 +44,10 @@ def yelling(client, channel, nick, message, *args):
 
                 client.msg(channel, random_resp['msg'])
 
-                db.yelling.update_one({
-                    'msg': message,
-                    'channel': channel,
-                }, { '$set': { 'msg': message } }, upsert=True)
+            db.yelling.update_one({
+                'msg': message,
+                'channel': channel,
+            }, { '$set': { 'msg': message } }, upsert=True)
 
         return (channel, nick, message)
 
