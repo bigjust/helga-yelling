@@ -1,26 +1,19 @@
-import unittest
-
 from helga_yelling import is_shout
 
 
-class ShoutDetectionTestCase(unittest.TestCase):
+class TestShoutDetection(object):
 
     def test_emoticon(self):
-
-        self.assertFalse(is_shout(':)'))
+        assert is_shout(':)') is False
 
     def test_short_message(self):
-
-        self.assertFalse(is_shout('I'))
+        assert is_shout('I') is False
 
     def test_simple_shout(self):
-
-        self.assertTrue(is_shout('YO'))
+        assert is_shout('YO') is True
 
     def test_actual_shout(self):
-
-        self.assertTrue(is_shout('WHAT THE FUCK'))
+        assert is_shout('WHAT THE FUCK') is True
 
     def test_blank_message(self):
-
-        self.assertFalse(is_shout(''))
+        assert is_shout('') is False
