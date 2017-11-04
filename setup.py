@@ -23,7 +23,6 @@ setup(name="helga-yelling",
       entry_points = dict(
           helga_plugins = [
               'yelling = helga_yelling:yelling',
-              'yelling_remove = helga_yelling:forget_yell',
           ],
       ),
 )
